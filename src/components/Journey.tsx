@@ -34,10 +34,10 @@ const CONTACT_INFO = {
   address: 'Mimboman, Yaoundé',
 }
 
-function CardHeading({ icon: Icon, children }: { icon: typeof Briefcase; children: React.ReactNode }) {
+function PanelHead({ icon: Icon, children }: { icon: typeof Briefcase; children: React.ReactNode }) {
   return (
-    <h3 className="mb-3.5 flex items-center gap-2 font-display text-[15px] font-semibold text-ink">
-      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-rose to-peach text-white shadow-soft">
+    <h3 className="flex items-center gap-2 font-display text-[13px] font-semibold uppercase tracking-[0.12em] text-ink">
+      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-rose/10 text-rose">
         <Icon className="h-3.5 w-3.5" />
       </span>
       {children}
@@ -45,8 +45,6 @@ function CardHeading({ icon: Icon, children }: { icon: typeof Briefcase; childre
   )
 }
 
-const cardCls =
-  'card-atelier rounded-[1.4rem] p-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-petal'
 const fade = (delay = 0) => ({
   initial: { opacity: 0, y: 20 },
   whileInView: { opacity: 1, y: 0 },
@@ -119,117 +117,125 @@ export default function Journey() {
           <TimelineCol items={experience.slice(mid)} lang={lang} />
         </div>
 
-        {/* ── Formation / Langues / Certifs / Formations / Coordonnées : une ligne ── */}
-        <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-5">
-          <motion.div {...fade(0)} className={cardCls}>
-            <CardHeading icon={GraduationCap}>{t('journey.education')}</CardHeading>
-            <div className="space-y-2.5">
-              {education.map((ed) => (
-                <div key={ed.degree.en} className="border-l-2 border-rose/15 pl-2.5">
-                  <h4 className="font-display text-sm font-semibold leading-snug text-ink">{ed.degree[lang]}</h4>
-                  <p className="text-xs text-plum/75">{ed.school[lang]}</p>
-                  <p className="font-mono text-[11px] text-plum/55">
-                    {ed.period}
-                    {ed.note ? ` · ${ed.note[lang]}` : ''}
-                  </p>
-                </div>
-              ))}
+        {/* ── Repères : bloc éditorial ouvert (sans carte) ── */}
+        <motion.div
+          {...fade(0.05)}
+          className="mt-12 border-t border-rose/15 pt-10"
+        >
+          <div className="grid gap-x-10 gap-y-9 lg:grid-cols-12">
+            {/* Formation — colonne large */}
+            <div className="lg:col-span-5">
+              <PanelHead icon={GraduationCap}>{t('journey.education')}</PanelHead>
+              <ol className="relative mt-5 space-y-4">
+                <span
+                  aria-hidden
+                  className="absolute left-[5px] top-2 bottom-2 w-px bg-gradient-to-b from-rose/40 via-peach/40 to-gold/30"
+                />
+                {education.map((ed) => (
+                  <li key={ed.degree.en} className="group relative pl-6">
+                    <span className="absolute left-0 top-[5px] h-2.5 w-2.5 rounded-full bg-gradient-to-br from-rose to-peach ring-2 ring-blush transition-transform duration-300 group-hover:scale-125" />
+                    <h4 className="font-display text-sm font-semibold leading-snug text-ink">{ed.degree[lang]}</h4>
+                    <p className="text-xs text-plum/75">{ed.school[lang]}</p>
+                    <p className="font-mono text-[11px] text-plum/55">
+                      {ed.period}
+                      {ed.note ? ` · ${ed.note[lang]}` : ''}
+                    </p>
+                  </li>
+                ))}
+              </ol>
             </div>
-          </motion.div>
 
-          <motion.div {...fade(0.05)} className={cardCls}>
-            <CardHeading icon={LangIcon}>{t('journey.languages')}</CardHeading>
-            <ul className="space-y-2.5">
-              {languages.map((l) => (
-                <li key={l.name.en}>
-                  <span className="font-display text-sm font-semibold text-ink">{l.name[lang]}</span>
-                  <p className="text-xs text-plum/70">{l.level[lang]}</p>
-                </li>
-              ))}
-            </ul>
-          </motion.div>
-
-          <motion.div {...fade(0.1)} className={cardCls}>
-            <CardHeading icon={Award}>{t('journey.certifications')}</CardHeading>
-            <div className="space-y-2.5">
-              {certifications.map((c) => (
-                <div key={c.name} className="border-l-2 border-rose/15 pl-2.5">
-                  <h4 className="font-display text-sm font-semibold leading-snug text-ink">{c.name}</h4>
-                  <p className="text-xs text-plum/75">
-                    {c.level[lang]} · {c.year}
-                  </p>
-                  {c.link && (
-                    <a
-                      href={c.link}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="text-[11px] font-medium text-rose transition-colors hover:text-peach"
-                    >
-                      ↗ {c.issuer[lang]}
-                    </a>
-                  )}
+            {/* Langues + Certifications */}
+            <div className="space-y-7 lg:col-span-3 lg:border-l lg:border-rose/10 lg:pl-9">
+              <div>
+                <PanelHead icon={LangIcon}>{t('journey.languages')}</PanelHead>
+                <ul className="mt-4 space-y-2.5">
+                  {languages.map((l) => (
+                    <li key={l.name.en} className="flex items-baseline justify-between gap-2">
+                      <span className="font-display text-sm font-semibold text-ink">{l.name[lang]}</span>
+                      <span className="text-right text-[11px] leading-tight text-plum/65">{l.level[lang]}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div>
+                <PanelHead icon={Award}>{t('journey.certifications')}</PanelHead>
+                <div className="mt-4 space-y-3">
+                  {certifications.map((c) => (
+                    <div key={c.name}>
+                      <h4 className="font-display text-sm font-semibold leading-snug text-ink">{c.name}</h4>
+                      <p className="text-xs text-plum/75">
+                        {c.level[lang]} · {c.year}
+                      </p>
+                      {c.link && (
+                        <a
+                          href={c.link}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-[11px] font-medium text-rose transition-colors hover:text-peach"
+                        >
+                          ↗ {c.issuer[lang]}
+                        </a>
+                      )}
+                    </div>
+                  ))}
                 </div>
-              ))}
+              </div>
             </div>
-          </motion.div>
 
-          <motion.div {...fade(0.15)} className={cardCls}>
-            <CardHeading icon={BookOpen}>{t('journey.trainings')}</CardHeading>
-            <div className="space-y-2.5">
-              {trainings.map((tr) => (
-                <div key={tr.name.en} className="border-l-2 border-rose/15 pl-2.5">
-                  <h4 className="font-display text-sm font-semibold leading-snug text-ink">{tr.name[lang]}</h4>
-                  {tr.link ? (
-                    <a
-                      href={tr.link}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="inline-flex items-center gap-1 text-[11px] font-medium text-rose transition-colors hover:text-peach"
-                    >
-                      <ExternalLink className="h-3 w-3" />
-                      {tr.issuer}
-                    </a>
-                  ) : (
-                    <p className="text-[11px] font-medium text-plum/70">{tr.issuer}</p>
-                  )}
-                </div>
-              ))}
+            {/* Formations en ligne */}
+            <div className="lg:col-span-4 lg:border-l lg:border-rose/10 lg:pl-9">
+              <PanelHead icon={BookOpen}>{t('journey.trainings')}</PanelHead>
+              <div className="mt-4 space-y-3.5">
+                {trainings.map((tr) => (
+                  <div key={tr.name.en} className="border-l-2 border-rose/15 pl-3">
+                    <h4 className="font-display text-sm font-semibold leading-snug text-ink">{tr.name[lang]}</h4>
+                    {tr.link ? (
+                      <a
+                        href={tr.link}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-1 text-[11px] font-medium text-rose transition-colors hover:text-peach"
+                      >
+                        <ExternalLink className="h-3 w-3" />
+                        {tr.issuer}
+                      </a>
+                    ) : (
+                      <p className="text-[11px] font-medium text-plum/70">{tr.issuer}</p>
+                    )}
+                  </div>
+                ))}
+              </div>
             </div>
-          </motion.div>
+          </div>
 
-          <motion.div {...fade(0.2)} className={cardCls}>
-            <CardHeading icon={UserRound}>{t('journey.info')}</CardHeading>
-            <ul className="space-y-2.5 text-sm">
-              <li className="flex items-start gap-2">
-                <UserRound className="mt-0.5 h-3.5 w-3.5 shrink-0 text-rose" />
-                <span className="font-semibold leading-snug text-ink">{CONTACT_INFO.fullName}</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <Globe className="h-3.5 w-3.5 shrink-0 text-rose" />
-                <span className="text-xs text-plum/80">{t('journey.nationality')}</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <Phone className="h-3.5 w-3.5 shrink-0 text-rose" />
-                <a href={CONTACT_INFO.phoneHref} className="text-xs text-plum/80 transition-colors hover:text-rose">
-                  {CONTACT_INFO.phone}
-                </a>
-              </li>
-              <li className="flex items-start gap-2">
-                <Mail className="mt-0.5 h-3.5 w-3.5 shrink-0 text-rose" />
-                <a
-                  href={`mailto:${CONTACT_INFO.email}`}
-                  className="break-all text-xs text-plum/80 transition-colors hover:text-rose"
-                >
-                  {CONTACT_INFO.email}
-                </a>
-              </li>
-              <li className="flex items-center gap-2">
-                <MapPin className="h-3.5 w-3.5 shrink-0 text-rose" />
-                <span className="text-xs text-plum/80">{CONTACT_INFO.address}</span>
-              </li>
-            </ul>
-          </motion.div>
-        </div>
+          {/* Coordonnées — bandeau fin en pied de panneau */}
+          <div className="mt-9 flex flex-wrap items-center gap-x-6 gap-y-2.5 border-t border-rose/10 pt-6 text-xs text-plum/80">
+            <span className="flex items-center gap-1.5 font-display font-semibold text-ink">
+              <UserRound className="h-3.5 w-3.5 text-rose" />
+              {CONTACT_INFO.fullName}
+            </span>
+            <span className="flex items-center gap-1.5">
+              <Globe className="h-3.5 w-3.5 text-rose" />
+              {t('journey.nationality')}
+            </span>
+            <a href={CONTACT_INFO.phoneHref} className="flex items-center gap-1.5 transition-colors hover:text-rose">
+              <Phone className="h-3.5 w-3.5 text-rose" />
+              {CONTACT_INFO.phone}
+            </a>
+            <a
+              href={`mailto:${CONTACT_INFO.email}`}
+              className="flex items-center gap-1.5 transition-colors hover:text-rose"
+            >
+              <Mail className="h-3.5 w-3.5 text-rose" />
+              {CONTACT_INFO.email}
+            </a>
+            <span className="flex items-center gap-1.5">
+              <MapPin className="h-3.5 w-3.5 text-rose" />
+              {CONTACT_INFO.address}
+            </span>
+          </div>
+        </motion.div>
 
         <div className="mt-8 flex justify-center">
           <a
