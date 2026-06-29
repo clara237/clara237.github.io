@@ -5,13 +5,8 @@ import {
   Briefcase,
   ExternalLink,
   FileText,
-  Globe,
   GraduationCap,
   Languages as LangIcon,
-  Mail,
-  MapPin,
-  Phone,
-  UserRound,
 } from 'lucide-react'
 import { useI18n } from '../i18n'
 import { SectionTitle } from './About'
@@ -24,14 +19,6 @@ const container = { hidden: {}, show: { transition: { staggerChildren: 0.1 } } }
 const item = {
   hidden: { opacity: 0, x: -20 },
   show: { opacity: 1, x: 0, transition: { duration: 0.5, ease } },
-}
-
-const CONTACT_INFO = {
-  fullName: 'Silatchom Kengni Isabelle Clara',
-  phone: '+237 699 567 072',
-  phoneHref: 'tel:+237699567072',
-  email: 'clarasilatchom03@gmail.com',
-  address: 'Mimboman, Yaoundé',
 }
 
 function PanelHead({ icon: Icon, children }: { icon: typeof Briefcase; children: React.ReactNode }) {
@@ -207,33 +194,6 @@ export default function Journey() {
                 ))}
               </div>
             </div>
-          </div>
-
-          {/* Coordonnées — bandeau fin en pied de panneau */}
-          <div className="mt-9 flex flex-wrap items-center gap-x-6 gap-y-2.5 border-t border-rose/10 pt-6 text-xs text-plum/80">
-            <span className="flex items-center gap-1.5 font-display font-semibold text-ink">
-              <UserRound className="h-3.5 w-3.5 text-rose" />
-              {CONTACT_INFO.fullName}
-            </span>
-            <span className="flex items-center gap-1.5">
-              <Globe className="h-3.5 w-3.5 text-rose" />
-              {t('journey.nationality')}
-            </span>
-            <a href={CONTACT_INFO.phoneHref} className="flex items-center gap-1.5 transition-colors hover:text-rose">
-              <Phone className="h-3.5 w-3.5 text-rose" />
-              {CONTACT_INFO.phone}
-            </a>
-            <a
-              href={`mailto:${CONTACT_INFO.email}`}
-              className="flex items-center gap-1.5 transition-colors hover:text-rose"
-            >
-              <Mail className="h-3.5 w-3.5 text-rose" />
-              {CONTACT_INFO.email}
-            </a>
-            <span className="flex items-center gap-1.5">
-              <MapPin className="h-3.5 w-3.5 text-rose" />
-              {CONTACT_INFO.address}
-            </span>
           </div>
         </motion.div>
 

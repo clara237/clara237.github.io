@@ -1,17 +1,7 @@
 import { motion } from 'framer-motion'
 import { ArrowDown, CalendarCheck, Sparkles } from 'lucide-react'
 import { useI18n } from '../i18n'
-import { projects } from '../data/projects'
-import { skillGroups } from '../data/skills'
 import { useBooking } from './Booking'
-
-const stackCount = new Set(skillGroups.flatMap((g) => g.skills)).size
-
-const stats = [
-  { value: `${projects.length}`, key: 'stats.projects' as const },
-  { value: `${stackCount}+`, key: 'stats.stacks' as const },
-  { value: '6', key: 'stats.domains' as const },
-]
 
 const ease = [0.22, 1, 0.36, 1] as const
 const rise = (delay: number) => ({
@@ -97,15 +87,6 @@ export default function Hero() {
               <CalendarCheck className="h-4 w-4" />
               {t('booking.cta')}
             </button>
-          </motion.div>
-
-          <motion.div {...rise(0.45)} className="mt-14 grid max-w-lg grid-cols-3 gap-4">
-            {stats.map((s) => (
-              <div key={s.key} className="card-atelier rounded-3xl p-5 text-center">
-                <div className="font-display text-4xl font-semibold text-ink">{s.value}</div>
-                <div className="mt-1 text-xs font-medium text-plum/70">{t(s.key)}</div>
-              </div>
-            ))}
           </motion.div>
         </div>
 
